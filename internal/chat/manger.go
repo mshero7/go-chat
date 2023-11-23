@@ -11,3 +11,11 @@ type ClientManager struct {
 	register   chan *Client
 	unregister chan *Client
 }
+
+func (manager *ClientManager) send(message []byte, ignore *Client) {
+	for conn := range manager.clients {
+		if conn != ignore {
+			conn.send <- message
+		}
+	}
+}
